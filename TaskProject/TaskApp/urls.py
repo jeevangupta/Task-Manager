@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import (my_task, create_task, delete_task, update_task)
+from .views import (home, my_task, create_task, delete_task, update_task)
 
 urlpatterns = [
+    path(r"", home, name="my-task"),
+
     path(r"my-task", my_task, name="my-task"),
 
     path(r"create-task", create_task, name="create-task"),

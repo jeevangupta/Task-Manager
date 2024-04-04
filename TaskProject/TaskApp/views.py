@@ -1,16 +1,23 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, HttpResponse
 from .models import Tasks
 from django.contrib import messages
-
+from django.urls import reverse
 from UserApp.auth_decorator import login_required
+
+def home(request):
+    data = {}
+    return render(request, './task_app/home.html', data)
 
 @login_required
 def my_task(request):
-    
-    all_tasks = Tasks.objects.all().order_by("title")
+    data = {}
+    if request.method == 'GET':
+        all_tasks = Tasks.objects.all().order_by("title")
 
-    data = {"all_tasks":all_tasks}
-    #messages.success(request, 'Test')
+        data = {"all_tasks":all_tasks}
+    else:
+        messages.error(request, f"Invalid method")
+
     return render(request, "./task_app/my_task.html", data)
 
 
