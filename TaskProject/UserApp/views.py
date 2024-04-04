@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login, logout
-#from .middlewares import auth, guest
+from .auth_decorator import loggedin_user
 
 # Create your views here.
+@loggedin_user
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -18,7 +19,7 @@ def register_view(request):
     data = {'form':form}    
     return render(request, "./user/register.html", data)
 
-
+@loggedin_user
 def login_view(request):
     
     if request.method == 'POST':
@@ -26,7 +27,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request,user)
-            return redirect('dashboard')
+            return redirect('my-task')
     else:
         initial_data = {'username':'', 'password':''}
         form = AuthenticationForm(initial=initial_data)
@@ -36,7 +37,8 @@ def login_view(request):
 
 
 def logout_view(request):
+
     logout(request)
     
-    return redirect(request, "login")
+    return redirect("login")
 

@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, render
 from .models import Tasks
 from django.contrib import messages
-# Create your views here.
 
+from UserApp.auth_decorator import login_required
+
+@login_required
 def my_task(request):
     
     all_tasks = Tasks.objects.all().order_by("title")
@@ -12,6 +14,7 @@ def my_task(request):
     return render(request, "./task_app/my_task.html", data)
 
 
+@login_required
 def create_task(request):
     if request.method == 'POST':
         task_title = request.POST.get("taskTitle",None)
@@ -33,6 +36,7 @@ def create_task(request):
     return redirect('my-task')
 
 
+@login_required
 def delete_task(request):
     if request.method == 'POST':
         task_id = request.POST.get("task-id",None)
@@ -53,6 +57,7 @@ def delete_task(request):
     return redirect('my-task')
 
 
+@login_required
 def update_task(request):
     if request.method == 'POST':
         task_id = request.POST.get("task-id",None)
