@@ -4,7 +4,7 @@
 {% block main_content %}
 
 <title> TaskManager - My Task</title>
-
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@3.2.46/dist/vue.global.js"></script> -->
 <script type="text/javascript" src="/static/task_app/my_task.js"></script>
 
 <div class="container-fluid">
@@ -22,9 +22,14 @@
     <div class="row">
         <div class="container">
             <div class="row d-flex mt-2">
-                <div class="col-8">
+                <div class="col-6">
                     <h3 class=""> My Task</h3>
                 </div>
+
+                <div class="col-2">
+                    <input type="text" id="searchTask" class="p-2 form-control" placeholder="Search task by title"></input>
+                </div>
+
                 <div class="col-2">
                     <select class="p-2 form-select" id="taskFilter" name="taskFilter">
                         <option value="All" selected>All</option>
@@ -33,6 +38,7 @@
                         <option value="Done">Done</option>
                     </select>
                 </div>
+
                 <div class="col-2">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
                         Create Task
@@ -40,6 +46,7 @@
                 </div>
             </div>
         </div>
+
         <div class="m-2 text-center p-2 ">
             {% for message in messages %}
             <span class="alert alert-dismissible fade show boder border-info border-3
@@ -50,6 +57,7 @@
             {% endfor %}
 
         </div>
+
         <div class="container mt-2">
             <div class="border-1 border-top border-bottom p-2">
                 {% if all_tasks %}
@@ -66,7 +74,7 @@
                     <tbody>
                         {% for task in all_tasks %}
                         <tr class="task-row" data-status="{{ task.status }}">
-                            <td scope="row">{{ task.title }}</td>
+                            <td class="task-title" scope="row">{{ task.title }}</td>
                             <td>{{ task.description }}</td>
                             <td class="text-{% if task.status == 'To Do' %}warning{% elif task.status == 'In Progress' %}info{% else %}success{% endif %}">
                                 {{ task.status }}
@@ -104,7 +112,7 @@
         <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="create-task" method="post">
+                    <form id="createTaskForm" action="create-task" method="post">
                         {% csrf_token %}
                         <div class="modal-header">
                             <h5 class="modal-title" id="taskModalLabel">Create New Task</h5>
@@ -112,7 +120,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="taskTitle" class="form-label">Task Title:</label>
+                                <label for="taskTitle" class="form-label" required>Task Title:</label>
                                 <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Enter task title">
                             </div>
                             <div class="mb-3">
@@ -129,20 +137,24 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="submit" class="btn btn-primary">Create Task</button>
+                            <button id="create-task" type="submit" class="btn btn-primary disabled">Create Task</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
         
-        
     </div>
 </div>
 
 <script>
+    
     $(document).ready(function() {
         $("#taskFilter").on("change", filterTaskTable);
+
+        $("#createTaskForm #taskTitle").on("keyup", onTitleChange);
+
+        $("#searchTask").on("keyup", searchTaskByTitle);
 
     });
 </script>

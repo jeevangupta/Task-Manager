@@ -21,13 +21,19 @@ def create_task(request):
         task_description = request.POST.get("taskDescription",None)
         task_status = request.POST.get("taskStatus",None)
 
-        task = Tasks(title= task_title, description = task_description, status = task_status)
+        if task_title:
+            if task_status in ["To Do","In Progres", "Done"]:
+                task = Tasks(title= task_title, description = task_description, status = task_status)
 
-        try:
-            task.save()
-            messages.success(request, 'Task created successfully!')
-        except Exception as e:
-            messages.success(request, f'Failed to create Task! {str(e)}')
+                try:
+                    task.save()
+                    messages.success(request, 'Task created successfully!')
+                except Exception as e:
+                    messages.success(request, f'Failed to create Task! {str(e)}')
+            else:
+                messages.success(request, 'Failed to create Task! Invalid task status')
+        else:
+            messages.success(request, 'Failed to create Task! Title cannot be empty')
     else:
         messages.error(request, f"Invalid method")
 
