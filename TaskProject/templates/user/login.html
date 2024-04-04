@@ -1,0 +1,56 @@
+
+{% extends 'base.html' %}
+
+{% block main_content %}
+{% csrf_token %}
+
+<title> TaskManager - Login</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand text-start" href="#">
+                    <h1> TaskManager </h1>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="mt-2">
+                    <h3> Login </h3>
+                </div>
+                <div class="border border-1 p-4 bg-light">
+                    <form method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+
+                        <div class="mt-3 form-group">
+                            <label for="{{ form.username.id_for_label}}">Username:</label>
+                            <input type="text" name="{{ form.username.name }}" class="form-control" value="{{ form.username.value}}" />
+                            {% if form.username.errors %}
+                            <span class="text-danger">{{ form.username.errors }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mt-3 form-group">
+                            <label for="{{ form.password.id_for_label}}">Password:</label>
+                            <input type="password" name="{{ form.password.name }}" class="form-control" value="{{ form.password.value}}" />
+                            <span class="text-danger">{{ form.password.errors }}</span>
+                        </div>
+            
+                        <div class="mt-3 text-center">
+                            <button type="submit" class="btn btn-primary">LOGIN</button>
+
+                            <a href="{% url 'register' %}" class="m-2">Register</a>
+                        </div>
+            
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main_content %}

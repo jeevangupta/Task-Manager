@@ -1,0 +1,150 @@
+
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+<title> TaskManager - My Task</title>
+
+<script type="text/javascript" src="/static/task_app/my_task.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand text-start" href="#">
+                    <h1> TaskManager </h1>
+                </a>
+
+                <a class="navbar-brand text-end" href="login">Login</a>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row d-flex mt-2">
+                <div class="col-8">
+                    <h3 class=""> My Task</h3>
+                </div>
+                <div class="col-2">
+                    <select class="p-2 form-select" id="taskFilter" name="taskFilter">
+                        <option value="All" selected>All</option>
+                        <option value="To Do" >To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
+                        Create Task
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="m-2 text-center p-2 ">
+            {% for message in messages %}
+            <span class="alert alert-dismissible fade show boder border-info border-3
+                        {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </span>
+            {% endfor %}
+
+        </div>
+        <div class="container mt-2">
+            <div class="border-1 border-top border-bottom p-2">
+                {% if all_tasks %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Change Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in all_tasks %}
+                        <tr class="task-row" data-status="{{ task.status }}">
+                            <td scope="row">{{ task.title }}</td>
+                            <td>{{ task.description }}</td>
+                            <td class="text-{% if task.status == 'To Do' %}warning{% elif task.status == 'In Progress' %}info{% else %}success{% endif %}">
+                                {{ task.status }}
+                            </td>
+                            <td>
+                                <form class="d-flex text-center" action="update-task" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="task-id" value="{{ task.id }}">
+                                    <select name="newStatus" class="form-select w-25 me-2">
+                                        <option value="" disabled selected>Change the status</option>
+                                        <option value="To Do">To Do</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Done">Done</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="delete-task" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="task-id" name="task-id" value="{{ task.id }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>No tasks found.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="create-task" method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="taskModalLabel">Create New Task</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="taskTitle" class="form-label">Task Title:</label>
+                                <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Enter task title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskDescription" class="form-label">Task Description:</label>
+                                <textarea class="form-control" id="taskDescription" name="taskDescription" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskStatus" class="form-label">Status:</label>
+                                <select class="form-select" id="taskStatus" name="taskStatus">
+                                    <option value="To Do" selected>To Do</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Done">Done</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="submit" class="btn btn-primary">Create Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#taskFilter").on("change", filterTaskTable);
+
+    });
+</script>
+
+{% endblock main_content %}
