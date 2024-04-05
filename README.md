@@ -19,7 +19,7 @@ Setup:
     2. Create a virtual environment:
 
         python3 -m venv env
-        source env/bin/activate
+        source ./env/bin/activate
 
     3. Install dependencies:
 

@@ -29,7 +29,7 @@ def create_task(request):
         task_status = request.POST.get("taskStatus",None)
 
         if task_title:
-            if task_status in ["To Do","In Progres", "Done"]:
+            if task_status in ["To Do","In Progress", "Done"]:
                 task = Tasks(title= task_title, description = task_description, status = task_status)
 
                 try:
@@ -42,9 +42,9 @@ def create_task(request):
         else:
             messages.success(request, 'Failed to create Task! Title cannot be empty')
     else:
-        messages.error(request, f"Invalid method")
+        messages.error(request, "Invalid method")
 
-    data = {"message":"Test"}
+    #data = {"message":"Test"}
 
     return redirect('my-task')
 
