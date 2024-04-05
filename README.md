@@ -9,9 +9,12 @@ Features
     4. Task search by title
     5. User registration, login, and authentication
 
+NOTE: Try to use python version >= 9
+
 Setup:
     1. Clone the repository:
         git clone https://github.com/jeevangupta/Task-Manager.git
+        cd Task-Manager
 
     2. Create a virtual environment:
 
@@ -27,7 +30,7 @@ Setup:
         2. Create a database named "TaskManager".
 
     5. Run database migrations:
-        cd TaskManager
+        cd TaskProject
         python manage.py migrate
 
     6. Start the development server:
