@@ -9,7 +9,7 @@ Features
     4. Task search by title
     5. User registration, login, and authentication
 
-NOTE: Try to use python version >= 9
+NOTE: Try to use python version >= 3.9
 
 Setup:
     1. Clone the repository:
@@ -51,6 +51,14 @@ Usage:
     9. Use the "Search by Title" option to search for specific tasks.
 
 
+
+Running with Docker Compose
+    1. Clone the repository:
+        git clone https://github.com/jeevangupta/Task-Manager.git
+        cd Task-Manager
+        
+    2. Build and run the application:
+        docker-compose up -d --buil
 
 
 
